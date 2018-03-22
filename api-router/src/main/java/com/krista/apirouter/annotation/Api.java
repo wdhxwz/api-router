@@ -4,6 +4,7 @@ import com.krista.apirouter.enumerate.ObsoletedType;
 
 import java.lang.annotation.*;
 
+
 /**
  * 标注于服务类上 <br/>
  * 版本号默认为1.0 <br/>
@@ -34,6 +35,12 @@ public @interface Api {
      * @return
      */
     String apiNo() default "";
+
+    /**
+     * 接口功能描述
+     * @return
+     */
+    String description() default "";
 
     /**
      * 服务方法是否已经过期，默认不过期

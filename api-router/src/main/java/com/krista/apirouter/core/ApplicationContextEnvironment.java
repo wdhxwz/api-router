@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * Spring 应用上下文环境
+ * Spring 应用上下文环境,Java Application模式启动
  * Created by Administrator on 2018/3/23.
  */
 public class ApplicationContextEnvironment {

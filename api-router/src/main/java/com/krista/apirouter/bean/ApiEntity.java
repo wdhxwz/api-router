@@ -15,6 +15,19 @@ public class ApiEntity {
      */
     private String description;
 
+    /**
+     * 服务方法是否已经过期
+     */
+    private boolean obsoleted;
+
+    public boolean isObsoleted() {
+        return obsoleted;
+    }
+
+    public void setObsoleted(boolean obsoleted) {
+        this.obsoleted = obsoleted;
+    }
+
     public Object getApiInfo() {
         return apiInfo;
     }

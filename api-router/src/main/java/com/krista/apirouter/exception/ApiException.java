@@ -1,5 +1,6 @@
 package com.krista.apirouter.exception;
 
+import com.krista.apirouter.response.NullResponseCode;
 import com.krista.apirouter.response.ResponseCode;
 
 /**
@@ -13,6 +14,7 @@ public class ApiException extends Exception{
 
     public ApiException(String message){
         super(message);
+        this.responseCode = NullResponseCode.EmptyCode;
     }
 
     public ApiException(ResponseCode responseCode){

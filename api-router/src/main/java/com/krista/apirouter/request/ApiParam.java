@@ -1,12 +1,15 @@
 package com.krista.apirouter.request;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * 接口的参数实体
  * Created by Administrator on 2018/3/22.
  */
-public class ApiParam {
+public class ApiParam implements Serializable{
+    private static final long serialVersionUID = -1L;
+
     /**
      * 请求头
      */

@@ -1,19 +1,24 @@
 package com.krista.apirouter.core;
 
+import com.krista.apirouter.annotation.Api;
 import com.krista.apirouter.bean.ApiEntity;
+import com.krista.apirouter.enumerate.ObsoletedType;
+import com.krista.apirouter.exception.ApiException;
 import com.krista.apirouter.utils.ApiUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.annotation.AnnotationUtils;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 缓存api接口信息
  * Created by Administrator on 2018/3/22.
  */
 public class ApiContext {
+    private static Logger logger = LoggerFactory.getLogger(ApiContext.class);
+
     /**
      * 缓存api信息<br/>
      * key:模块编号+"."+接口编号+"."+版本号
@@ -28,7 +33,54 @@ public class ApiContext {
     /**
      * 从Spring上下文中加载Api信息
      */
-    public void loadApi(ApplicationContext applicationContext) {
+    public void loadApi(ApplicationContext context) throws ApiException {
+        if(logger.isDebugEnabled()){
+            logger.debug("对Spring上下文中的Bean进行扫描，查找Api服务方法: " + context);
+        }
+
+        Map beanMap = context.getBeansWithAnnotation(Api.class);
+        Iterator localIterator = beanMap.keySet().iterator();
+        while (localIterator.hasNext()){
+            String key = (String) localIterator.next();
+            Object bean = beanMap.get(key);
+
+            // TODO : 相应接口还没设计
+            if(!(bean instanceof  Object)) {
+                // 抛异常？记录日志？
+            }
+
+            // 必须打上Api注解并且集成相应接口
+            Api api = bean.getClass().getAnnotation(Api.class);
+            if(api == null){
+                logger.info(">>>>>>接口:{} 未打上Api注解",key);
+            }else{
+                ApiEntity apiEntity = new ApiEntity();
+                String apiKey = ApiUtil.apiWithVersion(api.module(),api.apiNo(),api.version());
+
+                apiEntity.setApiInfo(bean);
+                apiEntity.setDescription(api.description());
+                apiEntity.setObsoleted(ObsoletedType.isObsoleted(api.obsoleted()));
+
+                // 不能有重复键
+                if(apiMap.containsKey(apiKey)){
+                    throw new ApiException("");
+                }
+
+                apiSet.add(ApiUtil.apiWithoutVersion(api.module(),api.apiNo()));
+                apiMap.put(apiKey,apiEntity);
+            }
+        }
+
+        // 获取上下文所有的bean,并遍历所有的bean，将具有@{link Api}的类缓存起来
+        String[] beanNames = context.getBeanNamesForType(Object.class);
+        for (final String beanName : beanNames) {
+            // 获取对应bean的类型,然后判断该bean是否打上了@{link Api}注解
+            Class<?> handlerType = context.getType(beanName);
+            if (AnnotationUtils.findAnnotation(handlerType, Api.class) != null) {
+
+            }
+        }
+
 
     }
 

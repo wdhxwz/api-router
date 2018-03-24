@@ -1,5 +1,6 @@
 package com.krista.apirouter.core;
 
+import com.krista.apirouter.exception.ApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -35,17 +36,13 @@ public class ApiRouter implements ApplicationContextAware {
     /**
      * 启动ApiRouter
      */
-    public void startup() {
+    public void startup() throws ApiException {
         if (logger.isInfoEnabled()) {
             logger.info(">>>>>>>>开始启动ApiRouter...");
         }
         Assert.notNull(this.applicationContext, "Spring上下文不能为空");
         apiContext =new ApiContext();
         apiContext.loadApi(applicationContext);
-//        if (null == requestHeadValidator) {
-//            requestHeadValidator = new DefaultRequestHeadValidator(apiRegister);
-//        }
-
         if (logger.isInfoEnabled()) {
             logger.info(">>>>>>>>ApiRouter启动成功！api个数:{}",apiContext.getApiCount());
         }

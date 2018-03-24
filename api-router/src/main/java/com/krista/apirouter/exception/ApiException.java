@@ -7,6 +7,8 @@ import com.krista.apirouter.response.ResponseCode;
  * 接口异常
  */
 public class ApiException extends Exception{
+    private static final long serialVersionUID = -1L;
+
     /**
      * 响应码
      */

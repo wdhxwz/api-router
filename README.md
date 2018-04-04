@@ -45,3 +45,12 @@ public class ApiParamter{
 
 ApiRouter可以解决上面的问题，并且对整个接口的调用流程进行抽取，封装，当业务系统需要这个路由功能的时候，直接对接，就可以使用了，避免重复的工作。
 
+
+## 实现方案
+
+- 通过注解的方式定义每个接口的公共参数：apiNo/version/module...,该注解同时会标志为spring的@Service
+- 服务执行者采用模板模型设计,并且使用泛型,这样每个接口在实现的时候，可以指定入参类型和出参类型
+- 基于spring-framework，程序启动时，从spring-context中获取指定注解的bean，将其缓存起来
+
+
+

@@ -39,6 +39,6 @@ public class ApiParamter{
 
 此时整个调用流程是：
 
-
+![image](https://github.com/wdhxwz/api-router/blob/master/images/api%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B.jpg)
 
 

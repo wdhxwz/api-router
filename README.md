@@ -26,3 +26,12 @@ api路由分发组件，适用于有接口编号等类似概念的服务。封�
 }
 
 ```
+
+其中`head`提供了与业务无关的参数，如接口编号、版本号、请求时间等，这部分数据是固定的，`body`是具体的业务参数，可以通过Map来接收，此时，整个系统的入参类型可以定义为：
+
+```
+public class ApiParamter{
+   private Head head;
+   private Map body;
+}
+```

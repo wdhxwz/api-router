@@ -53,7 +53,15 @@ ApiRouter可以解决上面的问题，并且对整个接口的调用流程进�
 - 基于spring-framework，程序启动时，从spring-context中获取指定注解的bean，将其缓存起来
 - 提供异常类和响应码接口，可以根据响应码构造异常，业务方定义自己响应码需继承响应码接口
 
+![image](https://github.com/wdhxwz/api-router/blob/master/images/%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84.jpg)
+
 ## 业务系统整合
 
 提供两种整合方式，dubbo方式、http方式
+
+## 具体设计
+
+
+
+
 

@@ -41,4 +41,7 @@ public class ApiParamter{
 
 ![image](https://github.com/wdhxwz/api-router/blob/master/images/api%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B.jpg)
 
+现在问题来了：怎么知道有哪些api并且具体api对应的参数类型？
+
+ApiRouter可以解决上面的问题，并且对整个接口的调用流程进行抽取，封装，当业务系统需要这个路由功能的时候，直接对接，就可以使用了，避免重复的工作。
 

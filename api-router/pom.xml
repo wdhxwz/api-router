@@ -13,6 +13,8 @@
         <dozer.version>5.5.1</dozer.version>
         <logger.version>1.7.21</logger.version>
         <commons-lang3.version>3.4</commons-lang3.version>
+        <fastjson.version>1.2.46</fastjson.version>
+        <hibernate-validator.version>6.0.7.Final</hibernate-validator.version>
     </properties>
 
     <dependencies>
@@ -53,5 +55,32 @@
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
         </dependency>
+
+        <!-- ali fast json -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+
+        <!-- JSR 303 -->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator.version}</version>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

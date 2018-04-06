@@ -8,5 +8,5 @@ import com.krista.apirouter.request.ApiParam;
  * Created by Administrator on 2018/3/23.
  */
 public interface ApiService {
-    public abstract void excute(ApiParam param) throws ApiException;
+    public abstract ApiParam execute(ApiParam param) throws ApiException;
 }

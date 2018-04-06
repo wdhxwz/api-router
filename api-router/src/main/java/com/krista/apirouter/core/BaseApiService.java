@@ -9,7 +9,9 @@ import com.krista.apirouter.request.ApiParam;
 public class BaseApiService implements ApiService{
 
     @Override
-    public void excute(ApiParam param) throws ApiException{
+    public ApiParam execute(ApiParam param) throws ApiException{
         ApplicationContextEnvironment.excuteApi(param);
+
+        return  null;
     }
 }

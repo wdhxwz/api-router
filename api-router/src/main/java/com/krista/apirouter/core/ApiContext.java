@@ -4,11 +4,11 @@ import com.krista.apirouter.annotation.Api;
 import com.krista.apirouter.bean.ApiEntity;
 import com.krista.apirouter.enumerate.ObsoletedType;
 import com.krista.apirouter.exception.ApiException;
+import com.krista.apirouter.response.ApiResponseCode;
 import com.krista.apirouter.utils.ApiUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.annotation.AnnotationUtils;
 
 import java.util.*;
 
@@ -25,7 +25,7 @@ public class ApiContext {
      */
     private Map<String, ApiEntity> apiMap = new HashMap<>(16);
 
-    /**
+    /**W
      * Api集合,元素内容为module + "." + apiNo
      */
     private final Set<String> apiSet = new HashSet<String>();
@@ -44,15 +44,17 @@ public class ApiContext {
             String key = (String) localIterator.next();
             Object bean = beanMap.get(key);
 
-            // TODO : 相应接口还没设计
-            if(!(bean instanceof  Object)) {
-                // 抛异常？记录日志？
+            // 接口需要继承AbstractApiService并实现模板方法
+            if(!(bean instanceof  AbstractApiService)) {
+               logger.warn(">>>>>接口 {} 没有继承AbstractApiService类",key);
+               continue;
             }
 
-            // 必须打上Api注解并且集成相应接口
+            // 必须打上Api注解并且继承相应接口
             Api api = bean.getClass().getAnnotation(Api.class);
             if(api == null){
                 logger.info(">>>>>>接口:{} 未打上Api注解",key);
+                continue;
             }else{
                 ApiEntity apiEntity = new ApiEntity();
                 String apiKey = ApiUtil.apiWithVersion(api.module(),api.apiNo(),api.version());
@@ -63,25 +65,15 @@ public class ApiContext {
 
                 // 不能有重复键
                 if(apiMap.containsKey(apiKey)){
-                    throw new ApiException("");
+                    throw new ApiException(ApiResponseCode.RepeatApiKey);
                 }
 
                 apiSet.add(ApiUtil.apiWithoutVersion(api.module(),api.apiNo()));
                 apiMap.put(apiKey,apiEntity);
+
+                logger.info(">>>>> 加载接口:{}",key);
             }
         }
-
-        // 获取上下文所有的bean,并遍历所有的bean，将具有@{link Api}的类缓存起来
-        String[] beanNames = context.getBeanNamesForType(Object.class);
-        for (final String beanName : beanNames) {
-            // 获取对应bean的类型,然后判断该bean是否打上了@{link Api}注解
-            Class<?> handlerType = context.getType(beanName);
-            if (AnnotationUtils.findAnnotation(handlerType, Api.class) != null) {
-
-            }
-        }
-
-
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.krista.apirouter.core;
 
+import com.krista.apirouter.exception.ApiException;
 import com.krista.apirouter.request.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ public class ApplicationContextEnvironment {
         logger.info(">>>>>>启动Spring容器完成:{}",springConfigClassPath);
     }
 
-    public static void loadApi(){
+    public static void loadApi() throws ApiException {
         apiContext.loadApi(applicationContext);
         logger.info(">>>>>>加载api数量{}个",apiContext.getApiCount());
     }

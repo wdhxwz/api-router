@@ -1,6 +1,7 @@
 package com.krista.apirouter.annotation;
 
 import com.krista.apirouter.enumerate.ObsoletedType;
+import org.springframework.stereotype.Service;
 
 import java.lang.annotation.*;
 
@@ -14,6 +15,7 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
+@Service
 public @interface Api {
     String value() default "";
 

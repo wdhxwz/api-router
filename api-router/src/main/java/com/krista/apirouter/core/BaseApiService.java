@@ -10,8 +10,6 @@ public class BaseApiService implements ApiService{
 
     @Override
     public ApiParam execute(ApiParam param) throws ApiException{
-        ApplicationContextEnvironment.excuteApi(param);
-
-        return  null;
+        return  ApplicationContextEnvironment.executeApi(param);
     }
 }

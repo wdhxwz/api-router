@@ -49,13 +49,20 @@ public class ApiRouter implements ApplicationContextAware {
      */
     public void startup() throws ApiException {
         if (logger.isInfoEnabled()) {
-            logger.info(">>>>>>>>开始启动ApiRouter...");
+            logger.info(">>>>>开始启动ApiRouter...");
         }
         Assert.notNull(this.applicationContext, "Spring上下文不能为空");
         apiContext = new ApiContext();
+
+        long start = System.currentTimeMillis();
+
         apiContext.loadApi(applicationContext);
+
+        long end = System.currentTimeMillis();
+
         if (logger.isInfoEnabled()) {
-            logger.info(">>>>>>>>ApiRouter启动成功！api个数:{}", apiContext.getApiCount());
+            logger.info(">>>>>ApiRouter启动成功！api个数:{},耗时(ms)：{}",
+                    apiContext.getApiCount(),(end - start));
         }
     }
 

@@ -6,10 +6,13 @@ import com.krista.apirouter.enumerate.ObsoletedType;
 import com.krista.apirouter.exception.ApiException;
 import com.krista.apirouter.response.ApiResponseCode;
 import com.krista.apirouter.utils.ApiUtil;
+import com.krista.apirouter.utils.LocalCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 
 /**
@@ -59,6 +62,9 @@ public class ApiContext {
                 ApiEntity apiEntity = new ApiEntity();
                 String apiKey = ApiUtil.apiWithVersion(api.module(),api.apiNo(),api.version());
 
+                Type type = ((ParameterizedType)bean.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+                LocalCache.addRequestParamType(apiKey,(Class)type);
+
                 apiEntity.setApiInfo(bean);
                 apiEntity.setDescription(api.description());
                 apiEntity.setObsoleted(ObsoletedType.isObsoleted(api.obsoleted()));
@@ -71,7 +77,7 @@ public class ApiContext {
                 apiSet.add(ApiUtil.apiWithoutVersion(api.module(),api.apiNo()));
                 apiMap.put(apiKey,apiEntity);
 
-                logger.info(">>>>> 加载接口:{}",key);
+                logger.info(">>>>> 加载接口:{}({})",bean.getClass().getName(),api.description());
             }
         }
     }

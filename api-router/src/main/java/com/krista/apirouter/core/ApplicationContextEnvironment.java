@@ -15,13 +15,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class ApplicationContextEnvironment {
     private static Logger logger = LoggerFactory.getLogger(ApplicationContextEnvironment.class);
 
-    private static ApiContext apiContext = new ApiContext();
-
     private static ApplicationContext applicationContext;
-
-    public  static ApiContext getApiContext(){
-        return apiContext;
-    }
 
     public static void startSpringContext(String springConfigClassPath) throws Exception{
         if(StringUtils.isEmpty(springConfigClassPath)){
@@ -29,15 +23,18 @@ public class ApplicationContextEnvironment {
         }
         logger.info(">>>>>>启动Spring容器:{}",springConfigClassPath);
         applicationContext = new ClassPathXmlApplicationContext(springConfigClassPath);
+
+        ApiRouter apiRouter = applicationContext.getBean(ApiRouter.class);
+        if(apiRouter == null){
+            throw new ApiException(">>>>> 没有配置ApiRouter");
+        }
+
         logger.info(">>>>>>启动Spring容器完成:{}",springConfigClassPath);
     }
 
-    public static void loadApi() throws ApiException {
-        apiContext.loadApi(applicationContext);
-        logger.info(">>>>>>加载api数量{}个",apiContext.getApiCount());
-    }
+    public static ApiParam executeApi(ApiParam param) throws ApiException{
+        ApiRouter apiRouter = applicationContext.getBean(ApiRouter.class);
 
-    public static void excuteApi(ApiParam param){
-
+        return apiRouter.executeApi(param);
     }
 }

@@ -59,20 +59,19 @@ public class ApiContext {
                 logger.info(">>>>>>接口:{} 未打上Api注解",key);
                 continue;
             }else{
-                ApiEntity apiEntity = new ApiEntity();
                 String apiKey = ApiUtil.apiWithVersion(api.module(),api.apiNo(),api.version());
-
                 Type type = ((ParameterizedType)bean.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
                 LocalCache.addRequestParamType(apiKey,(Class)type);
-
-                apiEntity.setApiInfo(bean);
-                apiEntity.setDescription(api.description());
-                apiEntity.setObsoleted(ObsoletedType.isObsoleted(api.obsoleted()));
 
                 // 不能有重复键
                 if(apiMap.containsKey(apiKey)){
                     throw new ApiException(ApiResponseCode.RepeatApiKey);
                 }
+
+                ApiEntity apiEntity = new ApiEntity();
+                apiEntity.setApiInfo(bean);
+                apiEntity.setDescription(api.description());
+                apiEntity.setObsoleted(ObsoletedType.isObsoleted(api.obsoleted()));
 
                 apiSet.add(ApiUtil.apiWithoutVersion(api.module(),api.apiNo()));
                 apiMap.put(apiKey,apiEntity);

@@ -3,15 +3,17 @@ package com.krista.apirouter.core;
 import com.krista.apirouter.exception.ApiException;
 import com.krista.apirouter.request.ApiParam;
 import com.krista.apirouter.response.ApiResponseCode;
-import com.krista.apirouter.utils.*;
-import org.springframework.beans.BeanUtils;
+import com.krista.apirouter.utils.ApiUtil;
+import com.krista.apirouter.utils.BeanMapper;
+import com.krista.apirouter.utils.LocalCache;
+import com.krista.apirouter.utils.ValidatorUtil;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
  * 抽象Api服务，使用模板模式设计
+ *
+ * @author krista
  */
 public abstract class AbstractApiService<TRequest, TResponse> implements ApiService {
     /**
@@ -19,6 +21,7 @@ public abstract class AbstractApiService<TRequest, TResponse> implements ApiServ
      *
      * @param request
      * @return
+     * @throws ApiException
      */
     protected abstract TResponse handle(TRequest request) throws ApiException;
 

@@ -6,8 +6,10 @@ import java.util.Map;
 /**
  * 接口的参数实体
  * Created by Administrator on 2018/3/22.
+ *
+ * @author krista
  */
-public class ApiParam implements Serializable{
+public class ApiParam implements Serializable {
     private static final long serialVersionUID = -1L;
 
     /**
@@ -18,7 +20,7 @@ public class ApiParam implements Serializable{
     /**
      * 请求体
      */
-    private Map<String,String> body;
+    private Map<String, String> body;
 
     public Head getHead() {
         return head;

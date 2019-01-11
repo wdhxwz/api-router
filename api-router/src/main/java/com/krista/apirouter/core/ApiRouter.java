@@ -5,7 +5,6 @@ import com.krista.apirouter.exception.ApiException;
 import com.krista.apirouter.request.ApiParam;
 import com.krista.apirouter.request.Head;
 import com.krista.apirouter.response.ApiResponseCode;
-import com.krista.apirouter.utils.ApiUtil;
 import com.krista.apirouter.utils.JsonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -20,6 +19,8 @@ import java.net.URLDecoder;
 
 /**
  * Api路由，Web模式启动
+ *
+ * @author krista
  */
 public class ApiRouter implements ApplicationContextAware {
     private static Logger logger = LoggerFactory.getLogger(ApiRouter.class);
@@ -40,6 +41,7 @@ public class ApiRouter implements ApplicationContextAware {
      * @param applicationContext
      * @throws BeansException
      */
+    @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
@@ -62,26 +64,27 @@ public class ApiRouter implements ApplicationContextAware {
 
         if (logger.isInfoEnabled()) {
             logger.info(">>>>>ApiRouter启动成功！api个数:{},耗时(ms)：{}",
-                    apiContext.getApiCount(),(end - start));
+                    apiContext.getApiCount(), (end - start));
         }
     }
 
     /**
      * 执行api服务
+     *
      * @param requestData
      * @throws ApiException
      */
     public ApiParam executeApi(String requestData) throws ApiException {
         // 请求的时候,参数为"",这里接收到的数据为"\"\"",因此不为空
-        logger.info("请求的数据：{}" , requestData);
+        logger.info("请求的数据：{}", requestData);
 
         // 参数为空
-        if(StringUtils.isEmpty(requestData)){
-            throw  new ApiException(ApiResponseCode.RequestDataIsEmpty);
+        if (StringUtils.isEmpty(requestData)) {
+            throw new ApiException(ApiResponseCode.RequestDataIsEmpty);
         }
 
         // Url decode
-        if (requestData.indexOf("%") > -1) {
+        if (requestData.contains("%")) {
             try {
                 requestData = URLDecoder.decode(requestData, "utf-8");
             } catch (UnsupportedEncodingException e) {
@@ -97,11 +100,12 @@ public class ApiRouter implements ApplicationContextAware {
             logger.error("对象序列化失败", e);
         }
 
-        return  this.executeApi(apiParam);
+        return this.executeApi(apiParam);
     }
 
     /**
      * 执行api服务
+     *
      * @param apiParam
      * @throws ApiException
      */
@@ -114,28 +118,28 @@ public class ApiRouter implements ApplicationContextAware {
 
         // 验证参数头
         Head head = apiParam.getHead();
-        if(head == null){
+        if (head == null) {
             logger.info("请求头为空");
             throw new ApiException(ApiResponseCode.RequestHeadIsEmpty);
         }
 
         String module = head.getModule();
         String apiNo = head.getApiNo();
-        if(!apiContext.isValidApi(module,apiNo)){
+        if (!apiContext.isValidApi(module, apiNo)) {
             throw new ApiException(ApiResponseCode.ApiNoNotExist);
         }
         String version = head.getVersion();
-        if(!apiContext.isValidVersion(module,apiNo,version)){
+        if (!apiContext.isValidVersion(module, apiNo, version)) {
             throw new ApiException(ApiResponseCode.VersionIsNotAvailable);
         }
 
         // 获取Api信息,并执行Api
-        ApiEntity apiEntity = apiContext.getApiEntity(module,apiNo,version);
-        if(apiEntity == null){
+        ApiEntity apiEntity = apiContext.getApiEntity(module, apiNo, version);
+        if (apiEntity == null) {
             throw new ApiException(ApiResponseCode.ApiNoNotExist);
         }
 
-        ApiService apiService = (ApiService)apiEntity.getApiInfo();
+        ApiService apiService = (ApiService) apiEntity.getApiInfo();
 
         return apiService.execute(apiParam);
     }

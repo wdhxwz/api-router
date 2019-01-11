@@ -2,12 +2,17 @@ package com.krista.apirouter.utils;
 
 import org.dozer.DozerBeanMapper;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 /**
- *  bean 映射器 <br/>
- *  基于dozer-5.5.1
+ * bean 映射器 <br/>
+ * 基于dozer-5.5.1
  * Created by Administrator on 2018/3/21.
+ *
+ * @author Administrator
  */
 public class BeanMapper {
     /**
@@ -25,7 +30,8 @@ public class BeanMapper {
     /**
      * 构造新的destinationClass实例对象，通过source对象中的字段内容
      * 映射到destinationClass实例对象中，并返回新的destinationClass实例对象。
-     *  @param source           源数据对象
+     *
+     * @param source           源数据对象
      * @param destinationClass 要构造新的实例对象Class
      */
     public static <T> T map(Object source, Class<T> destinationClass) {

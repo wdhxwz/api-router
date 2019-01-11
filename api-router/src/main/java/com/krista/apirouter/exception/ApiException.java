@@ -5,8 +5,10 @@ import com.krista.apirouter.response.ResponseCode;
 
 /**
  * 接口异常
+ *
+ * @author krista
  */
-public class ApiException extends Exception{
+public class ApiException extends Exception {
     private static final long serialVersionUID = -1L;
 
     /**
@@ -14,22 +16,23 @@ public class ApiException extends Exception{
      */
     private ResponseCode responseCode;
 
-    public ApiException(String message){
+    public ApiException(String message) {
         super(message);
         this.responseCode = ApiResponseCode.EmptyCode;
     }
 
-    public ApiException(ResponseCode responseCode){
+    public ApiException(ResponseCode responseCode) {
         this.responseCode = responseCode;
     }
 
-    public ApiException(String message,ResponseCode responseCode){
+    public ApiException(String message, ResponseCode responseCode) {
         super(message);
         this.responseCode = responseCode;
     }
 
     /**
      * 不收集异常堆栈信息
+     *
      * @return
      */
     @Override
@@ -39,6 +42,7 @@ public class ApiException extends Exception{
 
     /**
      * 获取响应码
+     *
      * @return
      */
     public ResponseCode getResponseCode() {

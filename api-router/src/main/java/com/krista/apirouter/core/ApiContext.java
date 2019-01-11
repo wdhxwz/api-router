@@ -18,6 +18,8 @@ import java.util.*;
 /**
  * 缓存api接口信息
  * Created by Administrator on 2018/3/22.
+ *
+ * @author krista
  */
 public class ApiContext {
     private static Logger logger = LoggerFactory.getLogger(ApiContext.class);
@@ -28,7 +30,8 @@ public class ApiContext {
      */
     private Map<String, ApiEntity> apiMap = new HashMap<>(16);
 
-    /**W
+    /**
+     * W
      * Api集合,元素内容为module + "." + apiNo
      */
     private final Set<String> apiSet = new HashSet<String>();
@@ -37,34 +40,34 @@ public class ApiContext {
      * 从Spring上下文中加载Api信息
      */
     public void loadApi(ApplicationContext context) throws ApiException {
-        if(logger.isDebugEnabled()){
+        if (logger.isDebugEnabled()) {
             logger.debug("对Spring上下文中的Bean进行扫描，查找Api服务方法: " + context);
         }
 
         Map beanMap = context.getBeansWithAnnotation(Api.class);
         Iterator localIterator = beanMap.keySet().iterator();
-        while (localIterator.hasNext()){
+        while (localIterator.hasNext()) {
             String key = (String) localIterator.next();
             Object bean = beanMap.get(key);
 
             // 接口需要继承AbstractApiService并实现模板方法
-            if(!(bean instanceof  AbstractApiService)) {
-               logger.warn(">>>>>接口 {} 没有继承AbstractApiService类",key);
-               continue;
+            if (!(bean instanceof AbstractApiService)) {
+                logger.warn(">>>>>接口 {} 没有继承AbstractApiService类", key);
+                continue;
             }
 
             // 必须打上Api注解并且继承相应接口
             Api api = bean.getClass().getAnnotation(Api.class);
-            if(api == null){
-                logger.info(">>>>>>接口:{} 未打上Api注解",key);
+            if (api == null) {
+                logger.info(">>>>>>接口:{} 未打上Api注解", key);
                 continue;
-            }else{
-                String apiKey = ApiUtil.apiWithVersion(api.module(),api.apiNo(),api.version());
-                Type type = ((ParameterizedType)bean.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-                LocalCache.addRequestParamType(apiKey,(Class)type);
+            } else {
+                String apiKey = ApiUtil.apiWithVersion(api.module(), api.apiNo(), api.version());
+                Type type = ((ParameterizedType) bean.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+                LocalCache.addRequestParamType(apiKey, (Class) type);
 
                 // 不能有重复键
-                if(apiMap.containsKey(apiKey)){
+                if (apiMap.containsKey(apiKey)) {
                     throw new ApiException(ApiResponseCode.RepeatApiKey);
                 }
 
@@ -73,29 +76,31 @@ public class ApiContext {
                 apiEntity.setDescription(api.description());
                 apiEntity.setObsoleted(ObsoletedType.isObsoleted(api.obsoleted()));
 
-                apiSet.add(ApiUtil.apiWithoutVersion(api.module(),api.apiNo()));
-                apiMap.put(apiKey,apiEntity);
+                apiSet.add(ApiUtil.apiWithoutVersion(api.module(), api.apiNo()));
+                apiMap.put(apiKey, apiEntity);
 
-                logger.info(">>>>> 加载接口:{}({})",bean.getClass().getName(),api.description());
+                logger.info(">>>>> 加载接口:{}({})", bean.getClass().getName(), api.description());
             }
         }
     }
 
     /**
      * 获取指定的api信息
+     *
      * @param moduleName 模块名称
-     * @param apiNo api编号
-     * @param version 版本号
+     * @param apiNo      api编号
+     * @param version    版本号
      * @return
      */
     public ApiEntity getApiEntity(String moduleName, String apiNo, String version) {
-        String key = ApiUtil.apiWithVersion(moduleName,apiNo,version);
+        String key = ApiUtil.apiWithVersion(moduleName, apiNo, version);
 
         return apiMap.get(key);
     }
 
     /**
      * 获取注册的api数量
+     *
      * @return
      */
     public int getApiCount() {
@@ -104,25 +109,27 @@ public class ApiContext {
 
     /**
      * 判断api是否有效
+     *
      * @param module 模块名称
-     * @param apiNo api编号
+     * @param apiNo  api编号
      * @return
      */
-    public boolean isValidApi(String module,String apiNo){
-        String apiKey = ApiUtil.apiWithoutVersion(module,apiNo);
+    public boolean isValidApi(String module, String apiNo) {
+        String apiKey = ApiUtil.apiWithoutVersion(module, apiNo);
 
         return apiSet.contains(apiKey);
     }
 
     /**
      * 指定版本号是否有效（包括不存在和过期）
-     * @param module 模块名称
-     * @param apiNo  api编号
+     *
+     * @param module  模块名称
+     * @param apiNo   api编号
      * @param version 版本号
      * @return
      */
-    public boolean isValidVersion(String module,String apiNo, String version) {
-        String key = ApiUtil.apiWithVersion(module,apiNo,version);
+    public boolean isValidVersion(String module, String apiNo, String version) {
+        String key = ApiUtil.apiWithVersion(module, apiNo, version);
         ApiEntity apiEntity = apiMap.get(key);
 
         return apiEntity != null && !apiEntity.isObsoleted();

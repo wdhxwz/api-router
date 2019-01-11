@@ -11,6 +11,8 @@ import java.lang.annotation.*;
  * 版本号默认为1.0 <br/>
  * 接口默认为不失效 <br/>
  * Created by Administrator on 2018/3/22.
+ *
+ * @author krista
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
@@ -28,25 +30,29 @@ public @interface Api {
 
     /**
      * 服务所在模块
+     *
      * @return
      */
     String module() default "";
 
     /**
      * 接口编号
+     *
      * @return
      */
     String apiNo() default "";
 
     /**
      * 接口功能描述
+     *
      * @return
      */
     String description() default "";
 
     /**
      * 服务方法是否已经过期，默认不过期
+     *
      * @return
      */
-    ObsoletedType obsoleted() default  ObsoletedType.DEFAULT;
+    ObsoletedType obsoleted() default ObsoletedType.DEFAULT;
 }

@@ -7,6 +7,8 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 /**
  * 基于JSR-303的验证工具类
+ *
+ * @author Administrator
  */
 public class ValidatorUtil {
     private ValidatorUtil() {
@@ -19,7 +21,7 @@ public class ValidatorUtil {
      * @param bindObject
      * @return 验证通过，返回null
      */
-    public static void valid(Object bindObject) throws ApiException{
+    public static void valid(Object bindObject) throws ApiException {
         DataBinder dataBinder = new DataBinder(bindObject, "bindObject");
         dataBinder.setValidator(getValidator());
         dataBinder.validate();

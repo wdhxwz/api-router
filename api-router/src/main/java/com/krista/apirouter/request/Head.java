@@ -5,8 +5,10 @@ import java.io.Serializable;
 /**
  * 服务请求头部信息
  * Created by Administrator on 2018/3/22.
+ *
+ * @author krista
  */
-public class Head implements Serializable{
+public class Head implements Serializable {
     private static final long serialVersionUID = -1L;
 
     /**
